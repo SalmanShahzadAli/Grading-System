@@ -3,6 +3,8 @@
 
 def select_grading_policy():
     print("Please Select Between Relative And Absolute Grading")
+    print("Absolute Grading Means That (Fixed Grade Thresholds)")
+    print("Relative Grading Means That (adjusting grades to match a predefined distribution like a normal curve)")
     print()
     
     # Loop until a valid input is received
