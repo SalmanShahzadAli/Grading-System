@@ -5,17 +5,30 @@
 
 # The below libraries Are Included To Bring The Necessary Things.
 import pandas as pd
+import os
 
+def LeaveLines():
+    print("\n" * 15)
+def clear_screen():
+    # Check the operating system
+    if os.name == 'nt':  # For Windows
+        os.system('cls')
+    else:  # For Unix/Linux/Mac
+        os.system('clear')
 def input_File_Type():
     """Allow the user to choose the file type and load grades accordingly."""
     try:
         # Prompt user for file type
-        file_type = input("Enter the file type (CSV/Excel): ").strip().lower()
+        # The Below Line will Clear The Screen 
+        clear_screen()
+        LeaveLines()
+        print("\t\t\t\t\t\tGrading Portal OF Ghulam Ishaq Khan Institue OF Engineering Sciences And Technology")
+        file_type = input("\t\t\t\t\t\tEnter the file type (CSV/Excel): ").strip().lower()
         if file_type not in ["csv", "excel"]:
-            raise ValueError("Invalid file type. Please enter 'CSV' or 'Excel'.")
+            raise ValueError("\t\t\t\t\t\tInvalid file type. Please enter 'CSV' or 'Excel'.")
 
         # Prompt user for file path
-        file_path = input("Enter the path to the file: ").strip()
+        file_path = input("\t\t\t\t\t\tEnter the path to the file: ").strip()
 
         # Load file based on type
         if file_type == 'csv':
@@ -23,8 +36,13 @@ def input_File_Type():
         elif file_type == 'excel':
             data = pd.read_excel(file_path)
 
-        print()
-        print("Fetching Data From",file_type.upper(),"Sheet")
+        
+        # Prompt user for file type
+        # The Below Line will Clear The Screen 
+        clear_screen()
+        LeaveLines()
+        print("\t\t\t\t\t\tGrading Portal OF Ghulam Ishaq Khan Institue OF Engineering Sciences And Technology")
+        print("\t\t\t\t\t\tFetching Data From",file_type.upper(),"Sheet")
         # Validate required columns
         if len(data.columns) < 5:
             raise ValueError("The file must contain at least 5 columns: FirstName, LastName, and three exam scores.")
@@ -42,9 +60,13 @@ def input_File_Type():
         structured_preview = pd.DataFrame(sections)
 
         # Display a structured preview
-        print("\nFile loaded successfully! Here's a structured preview of the data:")
-        print(structured_preview.head().to_string(index=False))
-
+        print("\t\t\t\t\t\tFile loaded successfully! Here's a structured preview of the data:")
+        # Print the header with tab spacing
+        print("\t\t\t\t\t\t" + " | ".join(structured_preview.columns))
+        
+        # Print each row with the specified tab spacing
+        for index, row in structured_preview.head(5).iterrows():
+            print("\t\t\t\t\t\t  " + "      ".join(map(str, row.values)))
         return data
     except FileNotFoundError:
         print("File not found. Please check the file path and try again.")
@@ -55,6 +77,7 @@ def input_File_Type():
     except Exception as e:
         print(f"An unexpected error occurred: {e}")
         return None
+
 
 # Example usage
 if __name__ == "__main__":

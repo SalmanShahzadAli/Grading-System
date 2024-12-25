@@ -1,3 +1,6 @@
+# Name - Salman Shahzad Ali 2023504
+# Name - Mussab Altaf 2023598
+# Name - Rayyan Hassan 2023476
 import csv
 import numpy as np
 from scipy.stats import skew, rankdata

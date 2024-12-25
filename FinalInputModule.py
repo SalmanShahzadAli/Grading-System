@@ -25,8 +25,13 @@ def input_File_Type():
         elif file_type == 'excel':
             data = pd.read_excel(file_path)
 
-        print()
-        print("Fetching Data From",file_type.upper(),"Sheet")
+        
+        # Prompt user for file type
+        # The Below Line will Clear The Screen 
+        clear_screen()
+        LeaveLines()
+        print("\t\t\t\t\t\tGrading Portal OF Ghulam Ishaq Khan Institue OF Engineering Sciences And Technology")
+        print("\t\t\t\t\t\tFetching Data From",file_type.upper(),"Sheet")
         # Validate required columns
         if len(data.columns) < 5:
             raise ValueError("The file must contain at least 5 columns: FirstName, LastName, and three exam scores.")
@@ -44,8 +49,11 @@ def input_File_Type():
         structured_preview = pd.DataFrame(sections)
 
         # Display a structured preview
-        print("\nFile loaded successfully! Here's a structured preview of the data:")
+        print("\t\t\t\t\t\tFile loaded successfully! Here's a structured preview of the data:")
+        print("===========================================")
         print(structured_preview.head().to_string(index=False))
+        print("===========================================")
+        time.sleep(2)
 
         return data
     except FileNotFoundError:
@@ -59,17 +67,22 @@ def input_File_Type():
         return None
 
 def select_grading_policy():
-    print("Please Select Between Relative And Absolute Grading")
-    print("Absolute Grading Means That (Fixed Grade Thresholds)")
-    print("Relative Grading Means That (adjusting grades to match a predefined distribution like a normal curve)")
+    # Prompt user for file type
+    # The Below Line will Clear The Screen 
+    clear_screen()
+    LeaveLines()
+    print("\t\t\t\t\tPlease Select Between Relative And Absolute Grading")
+    print("\t\t\t\t\tAbsolute Grading Means That (Fixed Grade Thresholds)")
+    print("\t\t\t\t\tRelative Grading Means That (adjusting grades to match a predefined distribution like a normal curve)")
     print()
     
     # Loop until a valid input is received
     while True:
-        grading_policy = input("Please Enter The Name Of The Grading Policy (Relative/Absolute): ").strip().lower()
+        grading_policy = input("\t\t\t\t\tPlease Enter The Name Of The Grading Policy (Relative/Absolute) (LowerCase): ").strip().lower()
         print()
         if grading_policy in ['relative', 'absolute']:
-            print(f"You have selected {grading_policy.capitalize()} Grading.")
+            print(f"\t\t\t\t\tYou have selected {grading_policy.capitalize()} Grading.")
+            time.sleep(2)
             if grading_policy == "relative":
                 return 1
             elif grading_policy == "absolute":
@@ -91,16 +104,19 @@ def Grade_Threshold_Absolute():
     # The Below Line will Clear The Screen 
     clear_screen()
     LeaveLines()
-    print("\t\t\t\t\t\t\tGrading Portal OF Ghulam Ishaq Khan Institue OF Engineering Sciences And Technology")
-    print("\t\t\t\t\t\t\tPlease Define The Thresholds For Grades")
-    print("\t\t\t\t\t\t\tWe Have The Following Grades [A,B,C,D,F]")
-    
+    print("\t\t\t\t\t\tGrading Portal OF Ghulam Ishaq Khan Institue OF Engineering Sciences And Technology")
+    print("\t\t\t\t\t\tPlease Define The Thresholds For Absolute Grading")
+    print("\t\t\t\t\t\tWe Have The Following Grades [A,B,C,D,F]")
+    time.sleep(2)
+    clear_screen()
+    LeaveLines()
+    print("\t\t\t\t\t\tGrading Portal OF Ghulam Ishaq Khan Institue OF Engineering Sciences And Technology")
     # Define thresholds for absolute grading
-    A = int(input("\t\t\t\t\t\t\tDefine Threshold For (e.g., >= 90%) A: "))
-    B = int(input("\t\t\t\t\t\t\tDefine Threshold For (e.g., >= 80%) B: "))
-    C = int(input("\t\t\t\t\t\t\tDefine Threshold For (e.g., >= 70%) C: "))
-    D = int(input("\t\t\t\t\t\t\tDefine Threshold For (e.g., >= 60%) D: "))
-    F = int(input("\t\t\t\t\t\t\tDefine Threshold For (e.g., < 60%) F: ")) # F is implicitly defined
+    A = int(input("\t\t\t\t\t\tDefine Threshold For (e.g., >= 90%) A: "))
+    B = int(input("\t\t\t\t\t\tDefine Threshold For (e.g., >= 80%) B: "))
+    C = int(input("\t\t\t\t\t\tDefine Threshold For (e.g., >= 70%) C: "))
+    D = int(input("\t\t\t\t\t\tDefine Threshold For (e.g., >= 60%) D: "))
+    F = int(input("\t\t\t\t\t\tDefine Threshold For (e.g., < 60%) F: ")) # F is implicitly defined
     
     # Store thresholds in a dictionary for easy access
     thresholds = {
@@ -114,25 +130,22 @@ def Grade_Threshold_Absolute():
     clear_screen()
     LeaveLines()
     
-    print("\t\t\t\t\t\tGrading Portal OF Ghulam Ishaq Khan Institue OF Engineering Sciences And Technology")
-    print("\t\t\t\t\t\t\tGrade thresholds defined as follows:")
+    print("\t\t\t\t\tGrading Portal OF Ghulam Ishaq Khan Institue OF Engineering Sciences And Technology")
+    print("\t\t\t\t\tGrade thresholds defined as follows:")
     for grade, threshold in thresholds.items():
-        print(f"\t\t\t\t\t\t\t{grade}: >= {threshold}%")
+        print(f"\t\t\t\t\t{grade}: >= {threshold}%")
     
-    time.sleep(3)    
-    
-    clear_screen()
-    LeaveLines()    
-    print("\t\t\t\t\t\tGrading Portal OF Ghulam Ishaq Khan Institue OF Engineering Sciences And Technology")
-    print("\t\t\t\t\t\tFor Example IF A Student Scores More Than 90% Than He Would For Sure Get An A Grade")
-    print("\t\t\t\t\t\tFor Example IF A Student Scores Less Than 60% Then He Would For Sure Get An F Grade")    
+    print("\t\t\t\t\tGrading Portal OF Ghulam Ishaq Khan Institue OF Engineering Sciences And Technology")
+    print("\t\t\t\t\tFor Example IF A Student Scores More Than 90% Than He Would For Sure Get An A Grade")
+    print("\t\t\t\t\tFor Example IF A Student Scores Less Than 60% Then He Would For Sure Get An F Grade")  
+    time.sleep(3)      
 
 def Grade_Threshold_Relative():
     # The Below Line will Clear The Screen 
     clear_screen()
     LeaveLines()
     print("\t\t\t\t\t\tGrading Portal OF Ghulam Ishaq Khan Institue OF Engineering Sciences And Technology")
-    print("\t\t\t\t\t\tPlease Define The Grades Distributions")
+    print("\t\t\t\t\t\tPlease Define The Grades Distributions For Relative Grading")
     print("\t\t\t\t\t\tWe Have The Following Grades [A,B,C,D,F]")
     
     time.sleep(2)
@@ -142,6 +155,7 @@ def Grade_Threshold_Relative():
             clear_screen()
             LeaveLines()
             # Collecting grade distribution from the user
+            print("\t\t\t\t\tGrading Portal OF Ghulam Ishaq Khan Institue OF Engineering Sciences And Technology")
             a = float(input("\t\t\t\t\tEnter the percentage of students receiving grade A (e.g., 20%): "))
             b = float(input("\t\t\t\t\tEnter the percentage of students receiving grade B (e.g., 30%): "))
             c = float(input("\t\t\t\t\tEnter the percentage of students receiving grade C (e.g., 25%): "))
@@ -178,4 +192,4 @@ def main():
     
 # Example usage
 if __name__ == "__main__":
-    input_File_Type()
+    main()
