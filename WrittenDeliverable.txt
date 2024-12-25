@@ -1,0 +1,40 @@
+DS221 - Semester Project
+the first submodule required us to allow the instructor to input grades as a csv file or excel sheet we choose csv. 
+so we had to import csv.
+and we made a seperate csv file in the same folder.
+in the driver function we asked the instructor to input the filename.
+we made a function named as process grades wehre we input filename .
+that function is going to read the file in read mode the reason to choose this is as we dont have to write anything.
+we have 3 exam scores in the dumy data and we sum them up to calculate average.
+then we have a if condition where its based on relative or absolute.
+we have two seperate functions as letter grades absolute and relative we run them passing total score and parameters.
+those two seperate functions are responsible for calculating based on the option.
+the second and third modules require the instructor to define grde thresholds we do that in the driver function.
+a clean output will be displayed where its straightforward.
+in the driver function the user gets the option to select.
+and based on that further process occur.
+this was all for input module.
+2. Statical Module.
+now for calculating descriptive statistics we import a library called numpy.this is for relative grading.
+at this stage we are going to modify the process_grades function.
+so we define an empty list named as scores.
+after calculating the average we simply append it into the scores list.
+after we are done with displaying we display the statistics.
+additionaly we have to make another function called as calculate statistics.this function will process data based on numpy calculations.
+now we are about to plot histograms and density plots of the grade distribution before and after adjustments hence we download the libraray matplotlib as well 
+as seaborn.now we need to make a seperate function known as plot distributions in which we will pass scores and title in the process grades function make the ammendments to also show the plot histograms and density plots when you run the code first the prior to adjustments will pop up and then the after adjustments will pop up.
+The above three lines were for relative grading and now for absolute grading.
+now we will keep a count on how many students fall into each category so we will make a list in the process grades function.we will increment the grade count based 
+on grade assinged.then we will add a few lines to display the summary of statistics we have calculated earlier.this will run in case of selecting absolute grading.
+Now we are on the module of Grade Adjustments 
+okay for relative grading we are going to aplly relative grading algorithems.
+so now we are going to have 2 different functions one as z-score scaling and the other as percentile scaling in both of them we will pass scores as the parameter.
+So now we are trying to achieve module 3 part c to achieve this step we create bins accoring to specified percentages then we will make an empty array of final grades.
+then we run a for loop to append according to thresholds. then we count final grades and print summary.
+Now we are about to move to module 4 which is reporting and visualisation.
+sub module a talks about Provide a detailed report showing the original and adjusted grades.
+
+
+
+
+ 
