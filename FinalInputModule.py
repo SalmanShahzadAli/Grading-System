@@ -2,7 +2,8 @@
 import pandas as pd
 import time
 import os
-
+import numpy as np
+from scipy.stats import skew
 
 def input_File_Type():
     """Allow the user to choose the file type and load grades accordingly."""
@@ -178,15 +179,39 @@ def Grade_Threshold_Relative():
         except ValueError:
             print("Error: Please enter valid numerical values.")
 
-
+def Calculate_Statistics_Relative_Grades(grades):
+    # Calculate the mean of the grades
+    mean = np.mean(grades)
+    varaince = np.var(grades)
+    skewness = skew(grades)
+    return mean,varaince,skewness
 def main():
-    input_File_Type()
+    data = input_File_Type()
     # IF The user Selects relative we get returned 1 and if the user selects absolute then we get 2
     # We need to call the functions based on the inputs 
     grading_policy_number = select_grading_policy()
     # We dont need to apply validation check as its already done in the function 
     if grading_policy_number == 1:
         Grade_Threshold_Relative()
+        # Extract exam scores after defining grade thresholds
+        # As We Have Extracted The Data From The Files Now We Can Use The Particular Data Which We Want
+        exam1_scores = data.iloc[:, 2]  # Third column for Exam 1
+        exam2_scores = data.iloc[:, 3]  # Fourth column for Exam 2
+        exam3_scores = data.iloc[:, 4]  # Fifth column for Exam 3
+
+        # Calculate statistics for each exam
+        exam1_stats = Calculate_Statistics_Relative_Grades(exam1_scores)
+        exam2_stats = Calculate_Statistics_Relative_Grades(exam2_scores)
+        exam3_stats = Calculate_Statistics_Relative_Grades(exam3_scores)
+        
+        # Display the results
+        clear_screen()
+        LeaveLines()
+        print("\t\t\t\t\tGrading Portal OF Ghulam Ishaq Khan Institute")
+        print("\t\t\t\t\tDisplaying You The Statistics Calculated For Relative Grading")
+        print("\t\t\t\t\tStatistics for Exam 1: Mean = {}, Variance = {}, Skewness = {}".format(*exam1_stats))
+        print("\t\t\t\t\tStatistics for Exam 2: Mean = {}, Variance = {}, Skewness = {}".format(*exam2_stats))
+        print("\t\t\t\t\tStatistics for Exam 3: Mean = {}, Variance = {}, Skewness = {}".format(*exam3_stats))
     elif grading_policy_number == 2:
         Grade_Threshold_Absolute()   
     
