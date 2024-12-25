@@ -229,6 +229,14 @@ def Assign_Grades(scores, thresholds):
             grade_counts['F'] += 1
 
     return grade_counts
+
+# The Below Function will handle calculation of Z-Scores
+def calculate_z_scores(scores):
+    mean = scores.mean()
+    std_dev = scores.std()
+    z_scores = (scores - mean) / std_dev
+    return z_scores
+
 def main():
     data = input_File_Type()
     # We Are Calculating The Length OF Students Because We Will need it in the future
@@ -256,6 +264,35 @@ def main():
         print("\t\t\t\t\tStatistics for Exam 1: Mean = {}, Variance = {}, Skewness = {}".format(*exam1_stats))
         print("\t\t\t\t\tStatistics for Exam 2: Mean = {}, Variance = {}, Skewness = {}".format(*exam2_stats))
         print("\t\t\t\t\tStatistics for Exam 3: Mean = {}, Variance = {}, Skewness = {}".format(*exam3_stats))
+        
+        time.sleep(3)
+        # Calculate z-scores for each exam
+        z_scores_exam1 = calculate_z_scores(exam1_scores)
+        z_scores_exam2 = calculate_z_scores(exam2_scores)
+        z_scores_exam3 = calculate_z_scores(exam3_scores)
+
+        clear_screen()
+        print("\t\t\t\t\t\tGrading Portal OF Ghulam Ishaq Khan University")
+        # Display the z-scores
+        print("\t\t\t\t\t\t\t==================================================")
+        print("\n\t\t\t\t\t\t\tZ-Scores for Exam 1:")
+        for name, score, z_score in zip(data.iloc[:, 0], exam1_scores, z_scores_exam1):
+            print(f"\t\t\t\t\t\t{name}\t\t\t{score}\t -> Z-Score: \t{z_score:.2f}")
+        print("\t\t\t\t\t\t===================================================")
+        
+        print()
+        print("\t\t\t\t\t\t==================================================")
+        print("\n\t\t\t\t\t\t\tZ-Scores for Exam 2:")
+        for name, score, z_score in zip(data.iloc[:, 0], exam2_scores, z_scores_exam2):
+            print(f"\t\t\t\t\t\t{name}\t\t\t{score}\t -> Z-Score: \t{z_score:.2f}")
+        print("\t\t\t\t\t\t==================================================")
+        
+        print()
+        print("\t\t\t\t\t\t==================================================")
+        print("\t\t\t\t\t\t\t\tZ-Scores for Exam 3:")
+        for name, score, z_score in zip(data.iloc[:, 0], exam3_scores, z_scores_exam3):
+            print(f"\t\t\t\t\t\t{name}\t\t\t{score}\t -> Z-Score: \t{z_score:.2f}")
+        print("\t\t\t\t\t\t===================================================")    
     elif grading_policy_number == 2:
         thresholds = Grade_Threshold_Absolute()   
         
