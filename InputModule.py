@@ -6,7 +6,7 @@
 # The below libraries Are Included To Bring The Necessary Things.
 import pandas as pd
 
-def input_grades():
+def input_File_Type():
     """Allow the user to choose the file type and load grades accordingly."""
     try:
         # Prompt user for file type
@@ -58,6 +58,6 @@ def input_grades():
 
 # Example usage
 if __name__ == "__main__":
-    input_grades()
+    input_File_Type()
 
 
