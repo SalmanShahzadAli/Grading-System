@@ -5,21 +5,12 @@
 # If absolute grading is selected, allow the instructor to 
 # define the grade thresholds (e.g., >=90% = A).
 
+import time
 import os
 
+
 def LeaveLines():
-    print()
-    print()
-    print()
-    print()
-    print()
-    print()
-    print()
-    print()
-    print()
-    print()
-    print()
-    print()
+    print("\n" * 15)
 def clear_screen():
     # Check the operating system
     if os.name == 'nt':  # For Windows
@@ -50,13 +41,16 @@ def Grade_Threshold_Absolute():
         'D': D,
         'F': F,
     }
-    
+    time.sleep(2)
     clear_screen()
     LeaveLines()
+    
+    print("\t\t\t\t\t\tGrading Portal OF Ghulam Ishaq Khan Institue OF Engineering Sciences And Technology")
     print("\t\t\t\t\t\t\tGrade thresholds defined as follows:")
     for grade, threshold in thresholds.items():
-        print(f"{grade}: >= {threshold}%")
-        
+        print(f"\t\t\t\t\t\t\t{grade}: >= {threshold}%")
+    
+    time.sleep(3)    
     
     clear_screen()
     LeaveLines()    
