@@ -56,7 +56,10 @@ def Grade_Threshold_Absolute():
     LeaveLines()    
     print("\t\t\t\t\t\tGrading Portal OF Ghulam Ishaq Khan Institue OF Engineering Sciences And Technology")
     print("\t\t\t\t\t\tFor Example IF A Student Scores More Than 90% Than He Would For Sure Get An A Grade")
-    print("\t\t\t\t\t\tFor Example IF A Student Scores Less Than 60% Then He Would For Sure Get An F Grade")    
+    print("\t\t\t\t\t\tFor Example IF A Student Scores Less Than 60% Then He Would For Sure Get An F Grade") 
+    
+    # Return the thresholds dictionary
+    return thresholds   
 
 
 def main():

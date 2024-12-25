@@ -52,6 +52,15 @@ def Grade_Threshold_Relative():
                 print(f"\t\t\t\t\tFor Example {a}% students will get an A grade")
                 print(f"\t\t\t\t\tFor Example {f}% students will get an F grade")
                 break  # Exit the loop if the input is valid
+                # Store the percentages in a dictionary for easy access
+                grade_distribution = {
+                    'A': a,
+                    'B': b,
+                    'C': c,
+                    'D': d,
+                    'F': f
+                }
+                return grade_distribution  # Return the grade distribution dictionary
         except ValueError:
             print("Error: Please enter valid numerical values.")
 

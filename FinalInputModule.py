@@ -4,7 +4,12 @@ import time
 import os
 import numpy as np
 from scipy.stats import skew
+import matplotlib.pyplot as plt
+import seaborn as sns
 
+
+# Set the style for seaborn
+sns.set(style="whitegrid")
 def input_File_Type():
     """Allow the user to choose the file type and load grades accordingly."""
     try:
@@ -139,7 +144,8 @@ def Grade_Threshold_Absolute():
     print("\t\t\t\t\tGrading Portal OF Ghulam Ishaq Khan Institue OF Engineering Sciences And Technology")
     print("\t\t\t\t\tFor Example IF A Student Scores More Than 90% Than He Would For Sure Get An A Grade")
     print("\t\t\t\t\tFor Example IF A Student Scores Less Than 60% Then He Would For Sure Get An F Grade")  
-    time.sleep(3)      
+    time.sleep(3)   
+    return thresholds   
 
 def Grade_Threshold_Relative():
     # The Below Line will Clear The Screen 
@@ -176,6 +182,15 @@ def Grade_Threshold_Relative():
                 print(f"\t\t\t\t\tFor Example {a}% students will get an A grade")
                 print(f"\t\t\t\t\tFor Example {f}% students will get an F grade")
                 break  # Exit the loop if the input is valid
+                # Store the percentages in a dictionary for easy access
+                grade_distribution = {
+                    'A': a,
+                    'B': b,
+                    'C': c,
+                    'D': d,
+                    'F': f
+                }
+                return grade_distribution  # Return the grade distribution dictionary
         except ValueError:
             print("Error: Please enter valid numerical values.")
 
@@ -185,25 +200,54 @@ def Calculate_Statistics_Relative_Grades(grades):
     varaince = np.var(grades)
     skewness = skew(grades)
     return mean,varaince,skewness
+
+# To The Below Function You Will Input scores And thresholds and it will return 
+# you the grade counts in which each students falls
+def Assign_Grades(scores, thresholds):
+    """
+    Assign grades based on the defined thresholds.
+
+    Parameters:
+    - scores: A list or array of exam scores.
+    - thresholds: A dictionary containing the grade thresholds.
+
+    Returns:
+    - A dictionary with the count of students in each grade category.
+    """
+    grade_counts = {grade: 0 for grade in thresholds.keys()}
+    
+    for score in scores:
+        if score >= thresholds['A']:
+            grade_counts['A'] += 1
+        elif score >= thresholds['B']:
+            grade_counts['B'] += 1
+        elif score >= thresholds['C']:
+            grade_counts['C'] += 1
+        elif score >= thresholds['D']:
+            grade_counts['D'] += 1
+        else:
+            grade_counts['F'] += 1
+
+    return grade_counts
 def main():
     data = input_File_Type()
+    # We Are Calculating The Length OF Students Because We Will need it in the future
+    total_students = len(data)
+    # As We Have Extracted The Data From The Files Now We Can Use The Particular Data Which We Want
+    # We Are Particularly Extracting The Exam Score Because We want to use them in both absolute and relative
+    exam1_scores = data.iloc[:, 2]  # Third column for Exam 1
+    exam2_scores = data.iloc[:, 3]  # Fourth column for Exam 2
+    exam3_scores = data.iloc[:, 4]  # Fifth column for Exam 3
     # IF The user Selects relative we get returned 1 and if the user selects absolute then we get 2
     # We need to call the functions based on the inputs 
     grading_policy_number = select_grading_policy()
     # We dont need to apply validation check as its already done in the function 
     if grading_policy_number == 1:
         Grade_Threshold_Relative()
-        # Extract exam scores after defining grade thresholds
-        # As We Have Extracted The Data From The Files Now We Can Use The Particular Data Which We Want
-        exam1_scores = data.iloc[:, 2]  # Third column for Exam 1
-        exam2_scores = data.iloc[:, 3]  # Fourth column for Exam 2
-        exam3_scores = data.iloc[:, 4]  # Fifth column for Exam 3
-
         # Calculate statistics for each exam
         exam1_stats = Calculate_Statistics_Relative_Grades(exam1_scores)
         exam2_stats = Calculate_Statistics_Relative_Grades(exam2_scores)
         exam3_stats = Calculate_Statistics_Relative_Grades(exam3_scores)
-        
         # Display the results
         clear_screen()
         LeaveLines()
@@ -213,8 +257,69 @@ def main():
         print("\t\t\t\t\tStatistics for Exam 2: Mean = {}, Variance = {}, Skewness = {}".format(*exam2_stats))
         print("\t\t\t\t\tStatistics for Exam 3: Mean = {}, Variance = {}, Skewness = {}".format(*exam3_stats))
     elif grading_policy_number == 2:
-        Grade_Threshold_Absolute()   
-    
+        thresholds = Grade_Threshold_Absolute()   
+        
+        # Calculate grade distribution for each exam
+        exam1_grade_counts = Assign_Grades(exam1_scores, thresholds)
+        exam2_grade_counts = Assign_Grades(exam2_scores, thresholds)
+        exam3_grade_counts = Assign_Grades(exam3_scores, thresholds)
+        
+        clear_screen()
+        LeaveLines()
+        print("\t\t\t\t\t\tGrading Portal OF Ghulam Ishaq Khan Institute")
+        print("\t\t\t\t\t\tDisplaying You The Results OF How Many Students Fall Into Particular Categories In Absolute Grading")
+        time.sleep(3)
+        clear_screen()
+        LeaveLines()
+        # Display the grade distribution for each exam
+        print("\t\t\t\t\t\t\tGrading Portal OF Ghulam Ishaq Khan Institute")
+        print("\t\t\t\t\t\t\tExam 1 Grade Distribution:")
+        for grade, count in exam1_grade_counts.items():
+            print(f"\t\t\t\t\t\t\tGrade {grade}: {count} students")
+        
+        time.sleep(2)
+        clear_screen()
+        LeaveLines()
+        print("\t\t\t\t\t\t\tGrading Portal OF Ghulam Ishaq Khan Institute")
+        print("\t\t\t\t\t\t\tExam 2 Grade Distribution:")
+        for grade, count in exam2_grade_counts.items():
+            print(f"\t\t\t\t\t\t\tGrade {grade}: {count} students")
+        time.sleep(2)        
+        clear_screen()
+        LeaveLines()
+        print("\t\t\t\t\t\tGrading Portal OF Ghulam Ishaq Khan Institute")
+        print("\t\t\t\t\t\tExam 3 Grade Distribution:")
+        for grade, count in exam3_grade_counts.items():
+            print(f"\t\t\t\t\t\tGrade {grade}: {count} students")
+        time.sleep(2)
+        # Now, let's plot the histograms and density plots for each exam score
+        plt.figure(figsize=(15, 5))
+
+        # Plot for Exam Score 1
+        plt.subplot(1, 3, 1)
+        sns.histplot(exam1_scores, bins=10, kde=True, color='blue')
+        plt.title('Distribution of Exam Score 1')
+        plt.xlabel('Scores')
+        plt.ylabel('Frequency')
+
+        # Plot for Exam Score 2
+        plt.subplot(1, 3, 2)
+        sns.histplot(exam2_scores, bins=10, kde=True, color='green')
+        plt.title('Distribution of Exam Score 2')
+        plt.xlabel('Scores')
+        plt.ylabel('Frequency')
+
+        # Plot for Exam Score 3
+        plt.subplot(1, 3, 3)
+        sns.histplot(exam3_scores, bins=10, kde=True, color='orange')
+        plt.title('Distribution of Exam Score 3')
+        plt.xlabel('Scores')
+        plt.ylabel('Frequency')
+
+        # Show the plots
+        plt.tight_layout()
+        plt.show()
+
 # Example usage
 if __name__ == "__main__":
     main()
