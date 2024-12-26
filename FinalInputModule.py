@@ -253,6 +253,7 @@ def Assign_Grades(scores, thresholds):
     # Initialize grade counts for all grades
     grade_counts = {grade: 0 for grade in thresholds.keys()}
     
+    grades = []
     # Assign grades based on thresholds
     for score in scores:
         for grade, boundary in sorted_thresholds:
@@ -261,7 +262,6 @@ def Assign_Grades(scores, thresholds):
                 break  # Stop checking once a grade is assigned
     
     return grade_counts
-
 # The Below Function will handle calculation of Z-Scores
 def calculate_z_scores(scores):
     if scores.empty:
@@ -335,6 +335,66 @@ def plot_grade_distributions(original_scores, adjusted_scores, exam_name):
     plt.tight_layout()
     plt.show()
 
+def generate_grade_report(data, thresholds):
+    # Extract scores from the DataFrame
+    exam1_scores = data.iloc[:, 2]
+    exam2_scores = data.iloc[:, 3]
+    exam3_scores = data.iloc[:, 4]
+
+    # Initialize lists for grades
+    exam1_grades = []
+    exam2_grades = []
+    exam3_grades = []
+
+    # Assign grades based on thresholds
+    for score in exam1_scores:
+        if score >= thresholds['A']:
+            exam1_grades.append('A')
+        elif score >= thresholds['B']:
+            exam1_grades.append('B')
+        elif score >= thresholds['C']:
+            exam1_grades.append('C')
+        elif score >= thresholds['D']:
+            exam1_grades.append('D')
+        else:
+            exam1_grades.append('F')
+
+    for score in exam2_scores:
+        if score >= thresholds['A']:
+            exam2_grades.append('A')
+        elif score >= thresholds['B']:
+            exam2_grades.append('B')
+        elif score >= thresholds['C']:
+            exam2_grades.append('C')
+        elif score >= thresholds['D']:
+            exam2_grades.append('D')
+        else:
+            exam2_grades.append('F')
+
+    for score in exam3_scores:
+        if score >= thresholds['A']:
+            exam3_grades.append('A')
+        elif score >= thresholds['B']:
+            exam3_grades.append('B')
+        elif score >= thresholds['C']:
+            exam3_grades.append('C')
+        elif score >= thresholds['D']:
+            exam3_grades.append('D')
+        else:
+            exam3_grades.append('F')
+
+    # Create a report DataFrame
+    report = pd.DataFrame({
+        'Name': data.iloc[:, 0] + ' ' + data.iloc[:, 1],  # Combining First and Last Name
+        'Exam 1 Score': exam1_scores,
+        'Exam 1 Grade': exam1_grades,
+        'Exam 2 Score': exam2_scores,
+        'Exam 2 Grade': exam2_grades,
+        'Exam 3 Score': exam3_scores,
+        'Exam 3 Grade': exam3_grades
+    })
+
+    return report
 def main():
     data = input_File_Type()
     # We Are Calculating The Length OF Students Because We Will need it in the future
@@ -401,6 +461,9 @@ def main():
         plot_grade_distributions(exam1_scores, exam1_adjusted, 'Exam 1')
         plot_grade_distributions(exam2_scores, exam2_adjusted, 'Exam 2')
         plot_grade_distributions(exam3_scores, exam3_adjusted, 'Exam 3')
+        
+        report = generate_grade_report(data, thresholds)
+        print(report)
 
     elif grading_policy_number == 2:
         thresholds = Grade_Threshold_Absolute()   
@@ -465,7 +528,10 @@ def main():
         # Show the plots
         plt.tight_layout()
         plt.show()
-
+        
+        report = generate_grade_report(data, thresholds)
+        print(report)
+        
 # Example usage
 if __name__ == "__main__":
     main()
