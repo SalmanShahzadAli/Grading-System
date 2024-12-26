@@ -24,12 +24,26 @@ def input_File_Type():
 
         # Prompt user for file path
         file_path = input("\t\t\t\t\t\tEnter the path to the file: ").strip()
-
+        
         # Load file based on type
         if file_type == 'csv':
-            data = pd.read_csv(file_path)
+            try:
+                data = pd.read_csv(file_path)  # For CSV
+            except pd.errors.EmptyDataError:
+                print("Error: The file is empty. Please provide a valid file.")
+                return None
+            except pd.errors.ParserError:
+                print("Error: There was a problem parsing the file. Please check the file format.")
+                return None
         elif file_type == 'excel':
-            data = pd.read_excel(file_path)
+            try:
+                data = pd.read_excel(file_path)  # For CSV
+            except pd.errors.EmptyDataError:
+                print("Error: The file is empty. Please provide a valid file.")
+                return None
+            except pd.errors.ParserError:
+                print("Error: There was a problem parsing the file. Please check the file format.")
+                return None
 
         
         # Prompt user for file type
@@ -118,11 +132,37 @@ def Grade_Threshold_Absolute():
     LeaveLines()
     print("\t\t\t\t\t\tGrading Portal OF Ghulam Ishaq Khan Institue OF Engineering Sciences And Technology")
     # Define thresholds for absolute grading
-    A = int(input("\t\t\t\t\t\tDefine Threshold For (e.g., >= 90%) A: "))
-    B = int(input("\t\t\t\t\t\tDefine Threshold For (e.g., >= 80%) B: "))
-    C = int(input("\t\t\t\t\t\tDefine Threshold For (e.g., >= 70%) C: "))
-    D = int(input("\t\t\t\t\t\tDefine Threshold For (e.g., >= 60%) D: "))
-    F = int(input("\t\t\t\t\t\tDefine Threshold For (e.g., < 60%) F: ")) # F is implicitly defined
+    try:
+        A = int(input("\t\t\t\t\t\tDefine Threshold For (e.g., >= 90%) A: "))
+    except ValueError:
+        print("Error: Please enter a valid integer for the threshold.")
+        return None
+    try:
+        B = int(input("\t\t\t\t\t\tDefine Threshold For (e.g., >= 80%) B: "))
+    except ValueError:
+        print("Error: Please enter a valid integer for the threshold.")
+        return None
+    try:
+        C = int(input("\t\t\t\t\t\tDefine Threshold For (e.g., >= 70%) C: "))
+    except ValueError:
+        print("Error: Please enter a valid integer for the threshold.")
+        return None
+    try:
+        D = int(input("\t\t\t\t\t\tDefine Threshold For (e.g., >= 60%) D: "))
+    except ValueError:
+        print("Error: Please enter a valid integer for the threshold.")
+        return None
+    try:
+        F = int(input("\t\t\t\t\t\tDefine Threshold For (e.g., < 60%) F: "))
+    except ValueError:
+        print("Error: Please enter a valid integer for the threshold.")
+        return None
+    
+    # A = int(input("\t\t\t\t\t\tDefine Threshold For (e.g., >= 90%) A: "))
+    # B = int(input("\t\t\t\t\t\tDefine Threshold For (e.g., >= 80%) B: "))
+    # C = int(input("\t\t\t\t\t\tDefine Threshold For (e.g., >= 70%) C: "))
+    # D = int(input("\t\t\t\t\t\tDefine Threshold For (e.g., >= 60%) D: "))
+    # F = int(input("\t\t\t\t\t\tDefine Threshold For (e.g., < 60%) F: ")) # F is implicitly defined
     
     # Store thresholds in a dictionary for easy access
     thresholds = {
@@ -224,6 +264,8 @@ def Assign_Grades(scores, thresholds):
 
 # The Below Function will handle calculation of Z-Scores
 def calculate_z_scores(scores):
+    if scores.empty:
+        raise ValueError("Scores cannot be empty for z-score calculation.")
     mean = scores.mean()
     std_dev = scores.std()
     z_scores = (scores - mean) / std_dev
