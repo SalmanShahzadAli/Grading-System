@@ -181,7 +181,6 @@ def Grade_Threshold_Relative():
                 print(f"\t\t\t\t\tA: {a}%, B: {b}%, C: {c}%, D: {d}%, F: {f}%")
                 print(f"\t\t\t\t\tFor Example {a}% students will get an A grade")
                 print(f"\t\t\t\t\tFor Example {f}% students will get an F grade")
-                break  # Exit the loop if the input is valid
                 # Store the percentages in a dictionary for easy access
                 grade_distribution = {
                     'A': a,
@@ -204,30 +203,23 @@ def Calculate_Statistics_Relative_Grades(grades):
 # To The Below Function You Will Input scores And thresholds and it will return 
 # you the grade counts in which each students falls
 def Assign_Grades(scores, thresholds):
-    """
-    Assign grades based on the defined thresholds.
-
-    Parameters:
-    - scores: A list or array of exam scores.
-    - thresholds: A dictionary containing the grade thresholds.
-
-    Returns:
-    - A dictionary with the count of students in each grade category.
-    """
+    # Validate the thresholds input
+    if not thresholds or not isinstance(thresholds, dict):
+        raise ValueError("Thresholds must be a valid dictionary of grade boundaries.")
+    
+    # Ensure thresholds are sorted in descending order of grade boundaries
+    sorted_thresholds = sorted(thresholds.items(), key=lambda x: x[1], reverse=True)
+    
+    # Initialize grade counts for all grades
     grade_counts = {grade: 0 for grade in thresholds.keys()}
     
+    # Assign grades based on thresholds
     for score in scores:
-        if score >= thresholds['A']:
-            grade_counts['A'] += 1
-        elif score >= thresholds['B']:
-            grade_counts['B'] += 1
-        elif score >= thresholds['C']:
-            grade_counts['C'] += 1
-        elif score >= thresholds['D']:
-            grade_counts['D'] += 1
-        else:
-            grade_counts['F'] += 1
-
+        for grade, boundary in sorted_thresholds:
+            if score >= boundary:
+                grade_counts[grade] += 1
+                break  # Stop checking once a grade is assigned
+    
     return grade_counts
 
 # The Below Function will handle calculation of Z-Scores
@@ -236,6 +228,50 @@ def calculate_z_scores(scores):
     std_dev = scores.std()
     z_scores = (scores - mean) / std_dev
     return z_scores
+
+def generate_grade_report(data, thresholds, grading_policy, exam1_scores, exam2_scores, exam3_scores):
+    # Initialize adjusted scores
+    exam1_adjusted = exam1_scores.copy()
+    exam2_adjusted = exam2_scores.copy()
+    exam3_adjusted = exam3_scores.copy()
+
+    # Relative grading using z-score scaling
+    if grading_policy == 1:  # Relative grading
+        # Calculate z-scores for each exam
+        z_scores_exam1 = calculate_z_scores(exam1_scores)
+        z_scores_exam2 = calculate_z_scores(exam2_scores)
+        z_scores_exam3 = calculate_z_scores(exam3_scores)
+
+        # Adjust z-scores to a target scale (e.g., scale to a mean of 75)
+        exam1_adjusted = z_scores_exam1 * 10 + 75  # Scale to a target mean
+        exam2_adjusted = z_scores_exam2 * 10 + 75
+        exam3_adjusted = z_scores_exam3 * 10 + 75
+        
+        print(f"Thresholds: {thresholds}")
+        if thresholds is None:
+            print("Error: Thresholds is None")
+
+        # Assign grades based on original scores
+        exam1_grades = Assign_Grades(exam1_scores, thresholds)
+        exam2_grades = Assign_Grades(exam2_scores, thresholds)
+        exam3_grades = Assign_Grades(exam3_scores, thresholds)
+
+        # Create a report DataFrame
+        report = pd.DataFrame({
+            'Name': data.iloc[:, 0],
+            'Exam 1 Score': exam1_scores,
+            'Exam 1 Grade': [k for k, v in exam1_grades.items() for _ in range(v)],
+            'Exam 1 Adjusted Score (Z-Score)': exam1_adjusted,
+            'Exam 2 Score': exam2_scores,
+            'Exam 2 Grade': [k for k, v in exam2_grades.items() for _ in range(v)],
+            'Exam 2 Adjusted Score (Z-Score)': exam2_adjusted,
+            'Exam 3 Score': exam3_scores,
+            'Exam 3 Grade': [k for k, v in exam3_grades.items() for _ in range(v)],
+            'Exam 3 Adjusted Score (Z-Score)': exam3_adjusted,
+        })
+
+    return report
+
 
 def main():
     data = input_File_Type()
@@ -251,7 +287,7 @@ def main():
     grading_policy_number = select_grading_policy()
     # We dont need to apply validation check as its already done in the function 
     if grading_policy_number == 1:
-        Grade_Threshold_Relative()
+        thresholds = Grade_Threshold_Relative()
         # Calculate statistics for each exam
         exam1_stats = Calculate_Statistics_Relative_Grades(exam1_scores)
         exam2_stats = Calculate_Statistics_Relative_Grades(exam2_scores)
@@ -293,6 +329,12 @@ def main():
         for name, score, z_score in zip(data.iloc[:, 0], exam3_scores, z_scores_exam3):
             print(f"\t\t\t\t\t\t{name}\t\t\t{score}\t -> Z-Score: \t{z_score:.2f}")
         print("\t\t\t\t\t\t===================================================")    
+        
+        # Generate the grade report
+        report = generate_grade_report(data, thresholds, grading_policy_number, exam1_scores, exam2_scores, exam3_scores)
+
+        # Display or save the report
+        print(report)  # You can also save it to a file if needed
     elif grading_policy_number == 2:
         thresholds = Grade_Threshold_Absolute()   
         
