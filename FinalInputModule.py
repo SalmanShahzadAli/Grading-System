@@ -271,7 +271,27 @@ def generate_grade_report(data, thresholds, grading_policy, exam1_scores, exam2_
         })
 
     return report
+# The below Code is For Relative Grading
+def plot_grade_distributions(original_scores, adjusted_scores, exam_name):
+    """Plot histograms and density plots for original and adjusted scores."""
+    plt.figure(figsize=(12, 6))
 
+    # Original Scores
+    plt.subplot(1, 2, 1)
+    sns.histplot(original_scores, bins=10, kde=True, color='blue', stat='density')
+    plt.title(f'Distribution of {exam_name} Scores (Original)')
+    plt.xlabel('Scores')
+    plt.ylabel('Density')
+
+    # Adjusted Scores
+    plt.subplot(1, 2, 2)
+    sns.histplot(adjusted_scores, bins=10, kde=True, color='orange', stat='density')
+    plt.title(f'Distribution of {exam_name} Scores (Adjusted)')
+    plt.xlabel('Scores')
+    plt.ylabel('Density')
+
+    plt.tight_layout()
+    plt.show()
 
 def main():
     data = input_File_Type()
@@ -310,8 +330,8 @@ def main():
         clear_screen()
         print("\t\t\t\t\t\tGrading Portal OF Ghulam Ishaq Khan University")
         # Display the z-scores
-        print("\t\t\t\t\t\t\t==================================================")
-        print("\n\t\t\t\t\t\t\tZ-Scores for Exam 1:")
+        print("\t\t\t\t\t\t==================================================")
+        print("\n\t\t\t\t\t\tZ-Scores for Exam 1:")
         for name, score, z_score in zip(data.iloc[:, 0], exam1_scores, z_scores_exam1):
             print(f"\t\t\t\t\t\t{name}\t\t\t{score}\t -> Z-Score: \t{z_score:.2f}")
         print("\t\t\t\t\t\t===================================================")
@@ -330,11 +350,16 @@ def main():
             print(f"\t\t\t\t\t\t{name}\t\t\t{score}\t -> Z-Score: \t{z_score:.2f}")
         print("\t\t\t\t\t\t===================================================")    
         
-        # Generate the grade report
-        report = generate_grade_report(data, thresholds, grading_policy_number, exam1_scores, exam2_scores, exam3_scores)
+        # Adjusted scores based on z-scores
+        exam1_adjusted = z_scores_exam1 * 10 + 75  # Scale to a target mean
+        exam2_adjusted = z_scores_exam2 * 10 + 75
+        exam3_adjusted = z_scores_exam3 * 10 + 75
+        
+        # Plot distributions for each exam
+        plot_grade_distributions(exam1_scores, exam1_adjusted, 'Exam 1')
+        plot_grade_distributions(exam2_scores, exam2_adjusted, 'Exam 2')
+        plot_grade_distributions(exam3_scores, exam3_adjusted, 'Exam 3')
 
-        # Display or save the report
-        print(report)  # You can also save it to a file if needed
     elif grading_policy_number == 2:
         thresholds = Grade_Threshold_Absolute()   
         
